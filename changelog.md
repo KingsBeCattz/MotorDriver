@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2026-05-11
+### Fixed
+- Fix deadzone threshold check in drive method to use correct variable name
+
+---
+
 ## [0.1.0] - 2026-05-11
 ### Added
 - `Motor::setDeadzone(uint8_t)` — sets the minimum PWM threshold below which the motor is not driven.
