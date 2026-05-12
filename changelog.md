@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.0.4] - 2026-05-11
+### Fixed
+- Added missing `#include <Arduino.h>` include in `DiffDrive.hpp`.
 ## [0.0.3] - 2026-05-11
 ### Fixed
 - Removed default argument from `MotorDriver::DiffDrive::update(bool)` definition in `.cpp` to comply with C++ standard (default arguments only allowed in declarations)
