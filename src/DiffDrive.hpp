@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Arduino.h>
 #include "Motor.hpp"
 
 namespace MotorDriver
