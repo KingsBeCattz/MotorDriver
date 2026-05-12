@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2026-05-11
+### Fixed
+- Fix drive method to correctly apply steerFactor for motor power adjustments
+
+---
+
 ## [0.1.1] - 2026-05-11
 ### Fixed
 - Fix deadzone threshold check in drive method to use correct variable name
