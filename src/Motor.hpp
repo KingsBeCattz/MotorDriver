@@ -57,7 +57,7 @@ namespace MotorDriver
     void attachEnable(Pin en, PinMode mode);
 
     /**
-     * @brief Sets the digital activation threshold for interpreting PWM values as digital HIGH in Digital mode.
+     * @brief Sets the digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
     void setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
 
@@ -101,7 +101,7 @@ namespace MotorDriver
     PinMode getEnableMode() const { return _EN_mode; }
 
     /**
-     * @brief Retrieves the current digital activation threshold for interpreting PWM values as digital HIGH in Digital mode.
+     * @brief Retrieves the current digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
     UnsignedPWM getDigitalActivationThreshold() const { return _digitalActivationThreshold; }
 
