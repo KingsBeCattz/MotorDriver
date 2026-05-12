@@ -66,7 +66,7 @@ namespace MotorDriver
     if (!_initialized)
       return;
 
-    if (abs(pwm) < _deadzone)
+    if (abs(pwm) < _deadzoneThreshold)
       pwm = 0;
 
     _writeEnable(abs(pwm));
