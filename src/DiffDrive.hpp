@@ -112,6 +112,10 @@ namespace MotorDriver
      * @brief Retrieves the current pivot mode for the differential drive.
      */
     PivotMode getPivotMode() const { return _pivot_mode; }
+    /**
+     * @brief Retrieves the currently attached enable pin.
+     */
+    Pin getEnablePin() const { return _EN; }
 
     // Control method
     /**

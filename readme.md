@@ -159,6 +159,7 @@ When `update(true)` is called, steering is ignored and both motors are driven in
 drive.isInitialized();              // bool
 drive.isEnabled();                  // bool
 drive.isEnablePinAttached();        // bool
+drive.getEnablePin();               // Pin
 drive.getPivotMode();               // PivotMode
 drive.getAttachedPowerFunction();   // PowerFn
 drive.getAttachedSteeringFunction(); // SteerFn
@@ -190,9 +191,3 @@ MotorDriver/
 ```
 
 Include `MotorDriver.hpp` in your sketch to access the full library.
-
----
-
-# 📄 License
-
-MIT License — free for personal and commercial use.
