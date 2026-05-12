@@ -82,6 +82,14 @@ motor.attachInput(IN1_PIN, IN2_PIN, PinMode::Digital);
 motor.setDigitalActivationThreshold(50); // Values > 50 → HIGH; < -50 → LOW
 ```
 
+### Deadzone
+
+The motor ignores PWM values below the deadzone threshold, preventing audible whining at low power levels:
+
+```cpp
+motor.setDeadzone(20); // Values in [-20, 20] → motor does not drive (default: 20)
+```
+
 ### Getters
 
 ```cpp
@@ -94,6 +102,7 @@ motor.getEnablePin();              // Pin
 motor.getEnableMode();             // PinMode
 motor.getCurrentPWM();             // SignedPWM
 motor.getDigitalActivationThreshold(); // UnsignedPWM
+motor.getDeadzone(); // UnsignedPWM
 ```
 
 ---
@@ -175,6 +184,7 @@ drive.getRightMotor();              // Motor&
 - **Initialization guard**: `begin()` will silently return if the required pins are not attached. Always verify with `isInitialized()` before driving.
 - **Redundant write suppression**: `Motor` tracks `_currentPWM` and skips `digitalWrite`/`analogWrite` calls when the value hasn't changed, reducing bus traffic on fast update loops.
 - **Safe destruction**: both `Motor` and `DiffDrive` call `stop()` (and pull EN LOW if applicable) in their destructors.
+- **Digital activation threshold**: defaults to `0`, meaning any non-zero PWM value triggers `HIGH`. Adjust with `setDigitalActivationThreshold()` if finer control is needed.
 
 ---
 
