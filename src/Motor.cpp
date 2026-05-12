@@ -66,6 +66,9 @@ namespace MotorDriver
     if (!_initialized)
       return;
 
+    if (abs(pwm) < _deadzone)
+      pwm = 0;
+
     _writeEnable(abs(pwm));
     _writeInput(pwm);
   }
