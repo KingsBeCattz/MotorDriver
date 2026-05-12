@@ -22,6 +22,7 @@ namespace MotorDriver
 
     UnsignedPWM _digitalActivationThreshold = 0; // Threshold for interpreting PWM as digital HIGH
     SignedPWM _currentPWM = 0;                   // Current PWM value for the motor. Positive = IN1 active; Negative = IN2 active
+    UnsignedPWM _deadzoneThreshold = 0;          // Threshold below which PWM values are treated as zero to prevent motor stalling
 
     SignedPWM _clampToDigital(SignedPWM pwm);
     void _writeInput(SignedPWM pwm);
@@ -47,6 +48,7 @@ namespace MotorDriver
      * @param mode The mode for the input pins (PinMode::Digital or PinMode::PWM).
      */
     void attachInput(Pin in1, Pin in2, PinMode mode);
+
     /**
      * @brief Attaches the motor enable pin (EN) with the specified mode.
      * If the pin is already attached, this function will ignore subsequent calls.
@@ -60,6 +62,11 @@ namespace MotorDriver
      * @brief Sets the digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
     void setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
+
+    /**
+     * @brief Sets the deadzone threshold for treating PWM values as zero to prevent motor stalling. Default is 0.
+     */
+    void setDeadzoneThreshold(UnsignedPWM threshold) { _deadzoneThreshold = threshold; }
 
     // Control methods
 
@@ -104,6 +111,11 @@ namespace MotorDriver
      * @brief Retrieves the current digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
     UnsignedPWM getDigitalActivationThreshold() const { return _digitalActivationThreshold; }
+
+    /**
+     * @brief Retrieves the current deadzone threshold for treating PWM values as zero to prevent motor stalling. Default is 0.
+     */
+    UnsignedPWM getDeadzoneThreshold() const { return _deadzoneThreshold; }
 
     /**
      * @brief Retrieves the current PWM value being applied to the motor. Positive values indicate forward direction (IN1 active), while negative values indicate reverse direction (IN2 active). In Digital mode, this will reflect the last set speed clamped to either 0 or the digital activation threshold.
