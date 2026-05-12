@@ -54,8 +54,8 @@ namespace MotorDriver
     }
 
     float steerFactor = 1.0f - abs(steering);                                      // Factor to reduce power on the pivoting wheel
-    _leftMotor.drive(steering < 0.0f ? power : (SignedPWM)(power * steerFactor));  // Reduce power on left motor for right turns
-    _rightMotor.drive(steering > 0.0f ? power : (SignedPWM)(power * steerFactor)); // Reduce power on right motor for left turns
+    _leftMotor.drive(steering < 0.0f ? (SignedPWM)(power * steerFactor) : power);  // Reduce power on left motor for right turns
+    _rightMotor.drive(steering > 0.0f ? (SignedPWM)(power * steerFactor) : power); // Reduce power on right motor for left turns
   }
 
   void DiffDrive::update(bool quick_spin)
