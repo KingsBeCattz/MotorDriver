@@ -58,7 +58,7 @@ namespace MotorDriver
     _rightMotor.drive(steering > 0.0f ? power : (SignedPWM)(power * steerFactor)); // Reduce power on right motor for left turns
   }
 
-  void DiffDrive::update(bool quick_spin = false)
+  void DiffDrive::update(bool quick_spin)
   {
     if (!_initialized || _get_power == nullptr || _get_steering == nullptr)
       return; // Cannot update if not initialized or if power/steering functions are not attached
