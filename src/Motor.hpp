@@ -2,6 +2,7 @@
 
 #include <utility>
 #include "Types.hpp"
+#include "Feedback.hpp"
 
 namespace MotorDriver
 {
@@ -34,7 +35,7 @@ namespace MotorDriver
     /**
      * @brief Initializes the motor by configuring the attached pins. This should be called after attaching the input and enable pins.
      */
-    void begin();
+    Feedback begin();
 
     // Setters
 
@@ -47,7 +48,7 @@ namespace MotorDriver
      * pin will be retained.
      * @param mode The mode for the input pins (PinMode::Digital or PinMode::PWM).
      */
-    void attachInput(Pin in1, Pin in2, PinMode mode);
+    Feedback attachInput(Pin in1, Pin in2, PinMode mode);
 
     /**
      * @brief Attaches the motor enable pin (EN) with the specified mode.
@@ -56,24 +57,24 @@ namespace MotorDriver
      * @param mode The mode for the enable pin (PinMode::Digital or PinMode::PWM).
      * Note: The enable pin is optional; the motor can operate without it if only direction control is needed.
      */
-    void attachEnable(Pin en, PinMode mode);
+    Feedback attachEnable(Pin en, PinMode mode);
 
     /**
      * @brief Sets the digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
-    void setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
+    Feedback setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
 
     /**
      * @brief Sets the deadzone threshold for treating PWM values as zero to prevent motor stalling. Default is 0.
      */
-    void setDeadzoneThreshold(UnsignedPWM threshold) { _deadzoneThreshold = threshold; }
+    Feedback setDeadzoneThreshold(UnsignedPWM threshold) { _deadzoneThreshold = threshold; }
 
     // Control methods
 
-    void drive(SignedPWM pwm);
-    void stop() { drive(0); }
-    void forward(UnsignedPWM speed) { drive(speed); }
-    void backward(UnsignedPWM speed) { drive(-speed); }
+    Feedback drive(SignedPWM pwm);
+    Feedback stop() { return drive(0); }
+    Feedback forward(UnsignedPWM speed) { return drive(speed); }
+    Feedback backward(UnsignedPWM speed) { return drive(-speed); }
 
     // Getters
 

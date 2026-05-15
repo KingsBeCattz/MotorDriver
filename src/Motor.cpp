@@ -1,4 +1,6 @@
 #include <Arduino.h>
+
+#include "Feedback.hpp"
 #include "Motor.hpp"
 
 namespace MotorDriver
@@ -61,47 +63,50 @@ namespace MotorDriver
     }
   }
 
-  void Motor::drive(SignedPWM pwm)
+  Feedback Motor::drive(SignedPWM pwm)
   {
     if (!_initialized)
-      return;
+      return Feedback::NOT_INITIALIZED;
 
     if (abs(pwm) < _deadzoneThreshold)
       pwm = 0;
 
     _writeEnable(abs(pwm));
     _writeInput(pwm);
+    return Feedback::OK;
   }
 
-  void Motor::attachInput(Pin in1, Pin in2, PinMode mode)
+  Feedback Motor::attachInput(Pin in1, Pin in2, PinMode mode)
   {
     if (Motor::_IN_attached)
-      return; // Already attached, ignore subsequent calls
+      return Feedback::INPUT_ALREADY_ATTACHED; // Already attached, ignore subsequent calls
     if (in1 == PIN_UNUSED || in2 == PIN_UNUSED)
-      return; // Invalid pin assignments
+      return Feedback::INVALID_PIN_ASSIGNMENT; // Invalid pin assignments
 
     Motor::_IN1 = in1;
     Motor::_IN2 = in2;
     Motor::_IN_mode = mode;
     Motor::_IN_attached = true;
+    return Feedback::OK;
   }
 
-  void Motor::attachEnable(Pin en, PinMode mode)
+  Feedback Motor::attachEnable(Pin en, PinMode mode)
   {
     if (Motor::_EN_attached)
-      return; // Already attached, ignore subsequent calls
+      return Feedback::ENABLE_ALREADY_ATTACHED; // Already attached, ignore subsequent calls
     if (en == PIN_UNUSED)
-      return; // Invalid pin assignment
+      return Feedback::INVALID_PIN_ASSIGNMENT; // Invalid pin assignment
     Motor::_EN = en;
 
     Motor::_EN_mode = mode;
     Motor::_EN_attached = true;
+    return Feedback::OK;
   }
 
-  void Motor::begin()
+  Feedback Motor::begin()
   {
     if (!Motor::_IN_attached)
-      return; // Cannot initialize without both input pins attached
+      return Feedback::INPUT_NOT_ATTACHED; // Cannot initialize without both input pins attached
 
     pinMode(Motor::_IN1, OUTPUT);
     pinMode(Motor::_IN2, OUTPUT);
@@ -109,5 +114,6 @@ namespace MotorDriver
       pinMode(Motor::_EN, OUTPUT);
 
     Motor::_initialized = true;
+    return Feedback::OK;
   }
 }
