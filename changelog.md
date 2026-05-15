@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2026-05-14
+### Added
+- `MotorDriver::Feedback` enum — explicit typed feedback codes returned by driver operations:
+  - `OK` — operation completed successfully.
+  - `INPUT_NOT_ATTACHED` — no input pin has been attached.
+  - `ENABLE_NOT_ATTACHED` — no enable pin has been attached.
+  - `NOT_INITIALIZED` — the motor or driver has not been initialized, or required callbacks are not attached.
+  - `INPUT_ALREADY_ATTACHED` — an input pin is already attached and cannot be reassigned.
+  - `ENABLE_ALREADY_ATTACHED` — an enable pin is already attached and cannot be reassigned.
+  - `INVALID_PIN_ASSIGNMENT` — the specified pin number is not valid for this operation.
+  - `MOTOR_INITIALIZATION_FAILED` — the motor failed to initialize correctly.
+  - `INVALID_FUNCTION` — a null pointer was provided when attaching a power or steering callback.
+
+---
+
 ## [0.1.2] - 2026-05-11
 ### Fixed
 - Fix drive method to correctly apply steerFactor for motor power adjustments

@@ -13,6 +13,7 @@ An Arduino C++ library for controlling DC motors and differential drive robots. 
 - **Configurable digital activation threshold** for PWM→digital clamping
 - **Callback-based architecture**: attach functions that return power and steering values
 - **Optional enable pin** support at both the motor and drive level
+- **Explicit typed feedback**: all operations return a `Feedback` code for error handling
 - **Safe destruction**: motors stop and disable automatically on object destruction
 
 ---
@@ -39,6 +40,18 @@ enum class PinMode : bool {
 enum class PivotMode : bool {
     Center, // Pivot around midpoint between wheels (one wheel reverses)
     Wheel,  // Pivot around the inner wheel (inner wheel stops)
+};
+
+enum class Feedback : unsigned char {
+    OK = 0,                    // Operation completed successfully
+    INPUT_NOT_ATTACHED = 1,    // No input pin has been attached
+    ENABLE_NOT_ATTACHED = 2,   // No enable pin has been attached
+    NOT_INITIALIZED = 3,       // Motor/driver not initialized, or required callbacks not attached
+    INPUT_ALREADY_ATTACHED = 4,  // Input pin already attached, cannot reassign
+    ENABLE_ALREADY_ATTACHED = 5, // Enable pin already attached, cannot reassign
+    INVALID_PIN_ASSIGNMENT = 6,  // Specified pin number is not valid for this operation
+    MOTOR_INITIALIZATION_FAILED = 7, // Motor failed to initialize correctly
+    INVALID_FUNCTION = 9,      // Null pointer provided when attaching a power or steering callback
 };
 ```
 
@@ -102,7 +115,7 @@ motor.getEnablePin();              // Pin
 motor.getEnableMode();             // PinMode
 motor.getCurrentPWM();             // SignedPWM
 motor.getDigitalActivationThreshold(); // UnsignedPWM
-motor.getDeadzone(); // UnsignedPWM
+motor.getDeadzone();               // UnsignedPWM
 ```
 
 ---
@@ -120,9 +133,18 @@ DiffDrive drive;
 drive.getLeftMotor().attachInput(L_IN1, L_IN2, PinMode::PWM);
 drive.getRightMotor().attachInput(R_IN1, R_IN2, PinMode::PWM);
 
+// Create callbacks
+SignedPWM powerFunction() {
+    return readJoystickY();
+}
+
+float steeringFunction() {
+    return readJoystickX();
+}
+
 // Attach callbacks
-drive.attachPowerFunction([]() -> SignedPWM { return readJoystickY(); });
-drive.attachSteeringFunction([]() -> float { return readJoystickX(); });
+drive.attachPowerFunction(powerFunction);
+drive.attachSteeringFunction(steeringFunction);
 
 // Optional: shared enable pin
 drive.attachEnablePin(EN_PIN);
@@ -132,6 +154,23 @@ drive.setPivotMode(PivotMode::Center);
 
 // Initialize
 drive.begin();
+```
+
+### Error Handling
+
+All major operations return a `Feedback` code. It is recommended to check the result of `begin()` and `update()`:
+
+```cpp
+if (drive.begin() != MotorDriver::Feedback::OK) {
+    // Handle initialization error
+}
+
+void loop() {
+    Feedback result = drive.update();
+    if (result != MotorDriver::Feedback::OK) {
+        // Handle runtime error
+    }
+}
 ```
 
 ### Main Loop
@@ -165,23 +204,24 @@ When `update(true)` is called, steering is ignored and both motors are driven in
 ### Getters
 
 ```cpp
-drive.isInitialized();              // bool
-drive.isEnabled();                  // bool
-drive.isEnablePinAttached();        // bool
-drive.getEnablePin();               // Pin
-drive.getPivotMode();               // PivotMode
-drive.getAttachedPowerFunction();   // PowerFn
+drive.isInitialized();               // bool
+drive.isEnabled();                   // bool
+drive.isEnablePinAttached();         // bool
+drive.getEnablePin();                // Pin
+drive.getPivotMode();                // PivotMode
+drive.getAttachedPowerFunction();    // PowerFn
 drive.getAttachedSteeringFunction(); // SteerFn
-drive.getLeftMotor();               // Motor&
-drive.getRightMotor();              // Motor&
+drive.getLeftMotor();                // Motor&
+drive.getRightMotor();               // Motor&
 ```
 
 ---
 
 ## Notes
 
-- **Pin attachment is one-time**: calling `attachInput`, `attachEnable`, or `attachEnablePin` more than once is silently ignored. Assign pins before calling `begin()`.
-- **Initialization guard**: `begin()` will silently return if the required pins are not attached. Always verify with `isInitialized()` before driving.
+- **Pin attachment is one-time**: calling `attachInput`, `attachEnable`, or `attachEnablePin` more than once returns `Feedback::INPUT_ALREADY_ATTACHED` or `Feedback::ENABLE_ALREADY_ATTACHED` respectively.
+- **Initialization guard**: `begin()` returns `Feedback::INPUT_NOT_ATTACHED` if required pins are not attached, and `Feedback::MOTOR_INITIALIZATION_FAILED` if initialization fails. Always verify with `isInitialized()` before driving.
+- **Callback validation**: passing `nullptr` to `attachPowerFunction()` or `attachSteeringFunction()` returns `Feedback::INVALID_FUNCTION`.
 - **Redundant write suppression**: `Motor` tracks `_currentPWM` and skips `digitalWrite`/`analogWrite` calls when the value hasn't changed, reducing bus traffic on fast update loops.
 - **Safe destruction**: both `Motor` and `DiffDrive` call `stop()` (and pull EN LOW if applicable) in their destructors.
 - **Digital activation threshold**: defaults to `0`, meaning any non-zero PWM value triggers `HIGH`. Adjust with `setDigitalActivationThreshold()` if finer control is needed.
@@ -192,7 +232,7 @@ drive.getRightMotor();              // Motor&
 
 ```
 MotorDriver/
-├── Types.hpp        # Typedefs and enumerations
+├── Types.hpp        # Typedefs and enumerations (including Feedback)
 ├── Motor.hpp        # Motor class declaration
 ├── Motor.cpp        # Motor class implementation
 ├── DiffDrive.hpp    # DiffDrive class declaration
