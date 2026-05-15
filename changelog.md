@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2026-05-15
+### Fixed
+- `Motor::setDigitalActivationThreshold` and `Motor::setDeadzoneThreshold` now correctly return `void` instead of `Feedback` (previously caused undefined behavior due to missing return statement).
+
+---
+
 ## [0.3.0] - 2026-05-15
 ### Added
 - `MotorDriver::feedbackToString(MotorDriver::Feedback)` — returns a human-readable description string for any `MotorDriver::Feedback` code.

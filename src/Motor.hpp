@@ -62,12 +62,12 @@ namespace MotorDriver
     /**
      * @brief Sets the digital activation threshold for interpreting PWM values as digital HIGH in Digital mode. Default is 0.
      */
-    Feedback setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
+    void setDigitalActivationThreshold(UnsignedPWM threshold) { _digitalActivationThreshold = threshold; }
 
     /**
      * @brief Sets the deadzone threshold for treating PWM values as zero to prevent motor stalling. Default is 0.
      */
-    Feedback setDeadzoneThreshold(UnsignedPWM threshold) { _deadzoneThreshold = threshold; }
+    void setDeadzoneThreshold(UnsignedPWM threshold) { _deadzoneThreshold = threshold; }
 
     // Control methods
 
