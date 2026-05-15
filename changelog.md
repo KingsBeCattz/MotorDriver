@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-05-15
+### Added
+- `MotorDriver::feedbackToString(MotorDriver::Feedback)` — returns a human-readable description string for any `MotorDriver::Feedback` code.
+
+---
+
 ## [0.2.0] - 2026-05-14
 ### Added
 - `MotorDriver::Feedback` enum — explicit typed feedback codes returned by driver operations:

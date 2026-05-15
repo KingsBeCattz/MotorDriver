@@ -53,6 +53,9 @@ enum class Feedback : unsigned char {
     MOTOR_INITIALIZATION_FAILED = 7, // Motor failed to initialize correctly
     INVALID_FUNCTION = 9,      // Null pointer provided when attaching a power or steering callback
 };
+
+// Convert a Feedback code to a human-readable string
+const char* feedbackToString(Feedback);
 ```
 
 ---
@@ -225,6 +228,7 @@ drive.getRightMotor();               // Motor&
 - **Redundant write suppression**: `Motor` tracks `_currentPWM` and skips `digitalWrite`/`analogWrite` calls when the value hasn't changed, reducing bus traffic on fast update loops.
 - **Safe destruction**: both `Motor` and `DiffDrive` call `stop()` (and pull EN LOW if applicable) in their destructors.
 - **Digital activation threshold**: defaults to `0`, meaning any non-zero PWM value triggers `HIGH`. Adjust with `setDigitalActivationThreshold()` if finer control is needed.
+- **Feedback messages**: use `MotorDriver::feedbackToString(code)` to get a human-readable description of any `Feedback` value. Useful for serial debugging: `Serial.println(MotorDriver::feedbackToString(result))`.
 
 ---
 
