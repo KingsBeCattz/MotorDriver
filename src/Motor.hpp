@@ -1,6 +1,5 @@
 #pragma once
 
-#include <utility>
 #include "Types.hpp"
 #include "Feedback.hpp"
 
@@ -94,7 +93,7 @@ namespace MotorDriver
     /**
      * @brief Retrieves the currently attached input pins (IN1, IN2) as a pair.
      */
-    std::pair<Pin, Pin> getInputPins() const { return {_IN1, _IN2}; }
+    PinPair getInputPins() const { return {_IN1, _IN2}; }
     /**
      * @brief Retrieves the currently attached input mode.
      */

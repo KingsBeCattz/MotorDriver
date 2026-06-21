@@ -53,4 +53,10 @@ namespace MotorDriver
     Center = false, ///< Pivot around the center point between the two wheels
     Wheel = true,   ///< Pivot around the wheel on the side of the turn (left wheel for left turns, right wheel for right turns)
   };
+
+  struct PinPair
+  {
+    Pin in1;
+    Pin in2;
+  };
 }
