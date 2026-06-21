@@ -112,7 +112,7 @@ motor.setDeadzone(20); // Values in [-20, 20] → motor does not drive (default:
 motor.isInitialized();             // bool
 motor.isInputAttached();           // bool
 motor.isEnableAttached();          // bool
-motor.getInputPins();              // std::pair<Pin, Pin>
+motor.getInputPins();              // PinPair
 motor.getInputMode();              // PinMode
 motor.getEnablePin();              // Pin
 motor.getEnableMode();             // PinMode

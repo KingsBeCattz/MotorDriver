@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2026-06-20
+### Changed
+- `Motor::getInputPins()` now returns a named `PinPair` struct (`in1`, `in2`) instead of `std::pair<Pin, Pin>` for compatibility with Arduino toolchains that may not provide `<utility>`.
+
+---
+
 ## [0.3.1] - 2026-05-15
 ### Fixed
 - `Motor::setDigitalActivationThreshold` and `Motor::setDeadzoneThreshold` now correctly return `void` instead of `Feedback` (previously caused undefined behavior due to missing return statement).
